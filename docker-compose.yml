@@ -59,6 +59,14 @@ services:
         condition: service_healthy
     networks:
       - meme-network
+  
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: meme-zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - meme-network
 
 networks:
   meme-network:
