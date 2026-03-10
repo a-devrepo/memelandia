@@ -1,5 +1,4 @@
 services:
-  # O Serviço que você acabou de criar
   discovery-server:
     build: ./discoveryserverapp
     container_name: discovery-server
@@ -10,8 +9,9 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - meme-network
 
-  # Infraestrutura que os próximos serviços vão precisar
   user-db:
     image: postgres:17
     container_name: user-db
@@ -21,6 +21,8 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - "5433:5432"
+    networks:
+      - meme-network
 
   meme-db:
     image: postgres:17
@@ -31,6 +33,8 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - "5434:5432"
+    networks:
+      - meme-network
 
   rabbitmq:
     image: rabbitmq:4.0-management
@@ -38,3 +42,24 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    networks:
+      - meme-network
+      
+  api-gateway:
+    build: ./apigateway
+    container_name: api-gateway
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+    networks:
+      - meme-network
+
+networks:
+  meme-network:
+    driver: bridge
