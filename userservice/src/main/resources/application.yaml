@@ -31,6 +31,13 @@ management:
     tracing:
       endpoint: "http://zipkin:9411/api/v2/spans"
 
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+
 eureka:
   client:
     serviceUrl:
