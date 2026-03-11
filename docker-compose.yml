@@ -59,6 +59,29 @@ services:
         condition: service_healthy
     networks:
       - meme-network
+  
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: meme-zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - meme-network
+
+  user-service:
+    build: ./userservice
+    container_name: user-service
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      user-db:
+        condition: service_started
+      discovery-server:
+        condition: service_healthy
+    networks:
+      - meme-network
 
 networks:
   meme-network:
