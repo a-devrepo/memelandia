@@ -53,7 +53,7 @@ services:
       - "8081:8081"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
-      - SPRING_PROFILES_ACTIVE=docker
+      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CLOUD_GATEWAY=TRACE
     depends_on:
       discovery-server:
         condition: service_healthy
@@ -74,7 +74,9 @@ services:
     ports:
       - "8082:8082"
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://user-db:5432/user_db
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://meme-zipkin:9411/api/v2/spans
     depends_on:
       user-db:
         condition: service_started
