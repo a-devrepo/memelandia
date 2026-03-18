@@ -1,9 +1,12 @@
 server:
   port: 8082
+  servlet:
+    context-path: /user-service
+  forward-headers-strategy: framework
 
 spring:
   application:
-    name: userservice
+    name: user-service
 
   datasource:
     url: jdbc:postgresql://user-db:5432/user_db
@@ -15,30 +18,36 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-
-logging:
-  pattern:
-    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
-
-management:
-  tracing:
-    sampling:
-      probability: 1.0
-  zipkin:
-    tracing:
-      endpoint: "http://zipkin:9411/api/v2/spans"
 
 springdoc:
   api-docs:
     path: /v3/api-docs
   swagger-ui:
     path: /swagger-ui.html
-    operationsSorter: method
 
 eureka:
+  instance:
+    prefer-ip-address: true
+    health-check-url-path: /user-service/actuator/health
+    status-page-url-path: /user-service/actuator/info
+    hostname: user-service
+    instance-id: ${spring.application.name}:${server.port}
+
   client:
-    serviceUrl:
+    fetch-registry: true
+    service-url:
       defaultZone: http://discovery-server:8761/eureka/
+    register-with-eureka: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,prometheus,zipkin"
+      base-path: /actuator
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: "http://meme-zipkin:9411/api/v2/spans"

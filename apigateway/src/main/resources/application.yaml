@@ -6,38 +6,60 @@ spring:
     web-application-type: reactive
   application:
     name: api-gateway
+
   cloud:
     gateway:
       server:
         webflux:
+          enabled: true
           discovery:
             locator:
-              enabled: true
+              enabled: false
+              lower-case-service-id: true
           routes:
-            - id: user-service-route
+            - id: user-service
               uri: lb://user-service
               predicates:
-                - Path=/api/v1/users/**
-            - id: meme-service-route
-              uri: lb://meme-service
-              predicates:
-                - Path=/api/v1/memes/**
+                - Path=/user-service/**
 
+            - id: user-service-docs
+              uri: lb://user-service
+              predicates:
+                - Path=/user-service/v3/api-docs/**
+
+
+# Configuração do Swagger UI
+springdoc:
+  swagger-ui:
+    urls:
+      - name: "User Service"
+        url: /user-service/v3/api-docs
+    disable-swagger-default-url: true
+
+# Configuração do Eureka
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka/}
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
+    registry-fetch-interval-seconds: 5
+    fetch-registry: true
+    register-with-eureka: true
+    disable-delta: true
+  instance:
+    prefer-ip-address: true
 
+# Monitoramento e Actuator
 management:
   endpoints:
     web:
       exposure:
-        include: "health,info,gateway,metrics,prometheus"
+        include: "health,info,gateway"
   endpoint:
+    gateway:
+      enabled: true
     health:
       show-details: always
-  info:
-    env:
-      enabled: true
-  gateway:
-    enabled: true
+
+logging:
+  level:
+    org.springframework.cloud.gateway: TRACE
