@@ -59,7 +59,26 @@ management:
       enabled: true
     health:
       show-details: always
+  logging:
+    export:
+      enabled: true
+  tracing:
+    sampling:
+      probability: 1.0
+    propagation:
+      type: b3
+    export:
+      enabled: true
+      zipkin:
+        enabled: true
+        endpoint: "http://zipkin:9411/api/v2/spans"
 
 logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
   level:
-    org.springframework.cloud.gateway: TRACE
+    root: INFO
+    org.springframework.cloud.gateway: INFO
+    org.springframework.cloud.gateway.filter.headers.observation: INFO
+    reactor.netty: INFO
+    com.nca.apigateway: DEBUG

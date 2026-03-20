@@ -43,11 +43,29 @@ management:
   endpoints:
     web:
       exposure:
-        include: "health,info,prometheus,zipkin"
-      base-path: /actuator
+        include: "health,info,gateway"
+  endpoint:
+    gateway:
+      enabled: true
+    health:
+      show-details: always
+  logging:
+    export:
+      enabled: true
   tracing:
     sampling:
       probability: 1.0
-  zipkin:
-    tracing:
-      endpoint: "http://meme-zipkin:9411/api/v2/spans"
+    propagation:
+      type: b3
+    export:
+      enabled: true
+      zipkin:
+        enabled: true
+        endpoint: "http://zipkin:9411/api/v2/spans"
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+  level:
+    root: INFO
+    com.nca.userserive: DEBUG
