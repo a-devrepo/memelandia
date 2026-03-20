@@ -1,0 +1,71 @@
+server:
+  port: 8083
+  servlet:
+    context-path: /meme-service
+  forward-headers-strategy: framework
+
+spring:
+  application:
+    name: memeservice
+
+  datasource:
+    url: jdbc:postgresql://meme-db:5432/meme_db
+    username: admin
+    password: password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    health-check-url-path: /meme-service/actuator/health
+    status-page-url-path: /meme-service/actuator/info
+    hostname: meme-service
+    instance-id: ${spring.application.name}:${server.port}
+
+  client:
+    fetch-registry: true
+    service-url:
+      defaultZone: http://discovery-server:8761/eureka/
+    register-with-eureka: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,gateway"
+  endpoint:
+    gateway:
+      enabled: true
+    health:
+      show-details: always
+  logging:
+    export:
+      enabled: true
+  tracing:
+    sampling:
+      probability: 1.0
+    propagation:
+      type: b3
+    export:
+      enabled: true
+      zipkin:
+        enabled: true
+        endpoint: "http://zipkin:9411/api/v2/spans"
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+  level:
+    root: INFO
+    com.nca.memeservice: DEBUG
