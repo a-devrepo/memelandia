@@ -84,6 +84,23 @@ services:
         condition: service_healthy
     networks:
       - meme-network
+  
+  meme-service:
+    build: ./memeservice
+    container_name: meme-service
+    ports:
+      - "8083:8083"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://meme-db:5432/meme_db
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://meme-zipkin:9411/api/v2/spans
+    depends_on:
+      user-db:
+        condition: service_started
+      discovery-server:
+        condition: service_healthy
+    networks:
+      - meme-network
 
 networks:
   meme-network:
