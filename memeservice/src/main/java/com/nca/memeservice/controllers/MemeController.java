@@ -34,4 +34,9 @@ public class MemeController {
         MemeResponseDTO response = service.atualizar(id, dto);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/memealeatorio")
+    public ResponseEntity<MemeResponseDTO> obterAleatorio() {
+        return ResponseEntity.ok(service.buscarAleatorio());
+    }
 }
