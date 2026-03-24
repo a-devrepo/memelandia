@@ -64,6 +64,14 @@ public class MemeService {
         return mapToResponse(repository.save(meme));
     }
 
+    @Transactional(readOnly = true)
+    public MemeResponseDTO buscarAleatorio() {
+        Meme meme = repository.findRandomMeme()
+                .orElseThrow(() -> new RuntimeException("Nenhum meme validado encontrado no sistema."));
+
+        return mapToResponse(meme);
+    }
+
     private MemeResponseDTO mapToResponse(Meme meme) {
 
         CategoriaResponseDTO categoriaDTO = new CategoriaResponseDTO(
