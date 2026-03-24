@@ -1,5 +1,6 @@
 package com.nca.memeservice.entities;
 
+import com.nca.memeservice.enums.StatusMeme;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -32,6 +33,9 @@ public class Meme {
     @JoinColumn(name = "categoria_id", nullable = false)
     private Categoria categoria;
 
+    @Enumerated(EnumType.STRING)
+    private StatusMeme status = StatusMeme.PENDENTE;
+
     @PrePersist
     protected void onCreate() {
         this.dataCadastro = LocalDateTime.now();
@@ -40,7 +44,7 @@ public class Meme {
     public Meme(){}
 
     public Meme(UUID id, String nome, String descricao, String urlArquivo, LocalDateTime dataCadastro,
-                UUID usuarioId, Categoria categoria) {
+                UUID usuarioId, Categoria categoria, StatusMeme status) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -48,6 +52,7 @@ public class Meme {
         this.dataCadastro = dataCadastro;
         this.usuarioId = usuarioId;
         this.categoria = categoria;
+        this.status = status;
     }
 
     public UUID getId() {
@@ -104,5 +109,13 @@ public class Meme {
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+    }
+
+    public StatusMeme getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusMeme status) {
+        this.status = status;
     }
 }
