@@ -6,7 +6,7 @@ server:
 
 spring:
   application:
-    name: memeservice
+    name: meme-service
 
   datasource:
     url: jdbc:postgresql://meme-db:5432/meme_db
@@ -18,6 +18,14 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+    template:
+      observation-enabled: true
 
 springdoc:
   api-docs:

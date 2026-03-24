@@ -27,6 +27,16 @@ spring:
               predicates:
                 - Path=/user-service/v3/api-docs/**
 
+            - id: meme-service
+              uri: lb://meme-service
+              predicates:
+                - Path=/meme-service/**
+
+            - id: meme-service-docs
+              uri: lb://meme-service
+              predicates:
+                - Path=/meme-service/v3/api-docs/**
+
 
 # Configuração do Swagger UI
 springdoc:
@@ -34,6 +44,8 @@ springdoc:
     urls:
       - name: "User Service"
         url: /user-service/v3/api-docs
+      - name: "Meme Service"
+        url: /meme-service/v3/api-docs
     disable-swagger-default-url: true
 
 # Configuração do Eureka
