@@ -38,7 +38,6 @@ spring:
                 - Path=/meme-service/v3/api-docs/**
 
 
-# Configuração do Swagger UI
 springdoc:
   swagger-ui:
     urls:
@@ -48,7 +47,6 @@ springdoc:
         url: /meme-service/v3/api-docs
     disable-swagger-default-url: true
 
-# Configuração do Eureka
 eureka:
   client:
     service-url:
@@ -60,8 +58,10 @@ eureka:
   instance:
     prefer-ip-address: true
 
-# Monitoramento e Actuator
 management:
+  info:
+    env:
+      enabled: true
   endpoints:
     web:
       exposure:
@@ -94,3 +94,12 @@ logging:
     org.springframework.cloud.gateway.filter.headers.observation: INFO
     reactor.netty: INFO
     com.nca.apigateway: DEBUG
+
+info:
+  app:
+    name: ${spring.application.name}
+    description: "Api gateway"
+    version: "1.0.0-SNAPSHOT"
+  contact:
+    email: "suporte@nca.com.br"
+    department: "Desenvolvimento"

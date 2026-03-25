@@ -48,6 +48,9 @@ eureka:
     register-with-eureka: true
 
 management:
+  info:
+    env:
+      enabled: true
   endpoints:
     web:
       exposure:
@@ -77,3 +80,12 @@ logging:
   level:
     root: INFO
     com.nca.userserive: DEBUG
+
+info:
+  app:
+    name: ${spring.application.name}
+    description: "Serviço de gerenciamento de usuários"
+    version: "1.0.0-SNAPSHOT"
+  contact:
+    email: "suporte@nca.com.br"
+    department: "Desenvolvimento"
