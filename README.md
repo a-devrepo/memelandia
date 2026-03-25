@@ -1,4 +1,4 @@
-# Memelandia
+# Sistema Memelandia
 
 Sistema distribuído baseado em microserviços para o gerenciamento de memes e usuários, focado em alta disponibilidade, persistência relacional e observabilidade.
 
